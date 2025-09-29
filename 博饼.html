@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="抖音美好体_爱给网_aigei_com.otf">
+    <title>DornGames - 多恩星环</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /*font-family: 'Space Grotesk', sans-serif;*/
+            color: #fff;
+            scroll-behavior: smooth;
+        }
+
+        @font-face {
+            font-family: '抖音美好体';
+            src: url('抖音美好体_爱给网_aigei_com.otf') format('opentype');
+            /* 现代浏览器 */
+        }
+
+        /* 宇宙背景 & 粒子效果 */
+        body {
+            background: #0a0a1a;
+            overflow-x: hidden;
+            font-family: '抖音美好体', sans-serif;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background:
+                radial-gradient(farthest-corner at 70% 30%, #66CCFF 0%, transparent 70%),
+                radial-gradient(farthest-corner at 30% 70%, #FF99CC 0%, transparent 70%),
+                linear-gradient(135deg, #0a0a1a 30%, #151530 70%);
+            mix-blend-mode: screen;
+        }
+
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: url('') repeat;
+            /* 星轨背景图 */
+            pointer-events: none;
+        }
+
+        .saturn-ring {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: rotate-ring 8s linear infinite;
+            mix-blend-mode: overlay;
+        }
+
+        .saturn-ring::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle at center, #FF99CC 20%, transparent 80%);
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        /* 核心容器 */
+        .container1 {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 30px 25px 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container2 {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0px 30px;
+            position: relative;
+            z-index: 10;
+            font-weight: 100;
+        }
+
+        /* 导航栏 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #66CCFF, #FF99CC);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        nav a {
+            text-decoration: none;
+            margin-left: 30px;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #66CCFF, #FF99CC);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* 3D悬浮卡片 */
+        .card {
+            background: rgba(10, 10, 26, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 10px 0;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3),
+                inset 0 0 5px rgba(255, 255, 255, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5),
+                inset 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        /* 土星主题标题 */
+        .section-title {
+            text-align: center;
+            font-size: 3em;
+            margin: 0px 0 10px;
+            position: relative;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -15px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #FF99CC 20%, transparent 80%),
+                circle 20px at center,
+                linear-gradient(45deg, transparent 48%, #66CCFF 50%, transparent 52%);
+            border-radius: 50%;
+            animation: rotate-title 4s linear infinite;
+        }
+
+        /* 成员头像特效 */
+        .member-avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-avatar::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(#66CCFF 30%, #FF99CC 70%);
+            mask: radial-gradient(circle, #000 40%, transparent 50%);
+            animation: rotate-avatar 6s linear infinite;
+        }
+
+        .member-avatar img {
+            width: 90%;
+            border-radius: 50%;
+            position: relative;
+            z-index: 10;
+            border: 5px solid #0a0a1a;
+        }
+
+        /* 作品轮播特效 */
+        .game-carousel {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 20px 0;
+        }
+
+        .game-card {
+            display: inline-block;
+            width: 215px;
+            height: 215px;
+            background: url('https://via.placeholder.com/350x450/000/fff') no-repeat;
+            background-size: cover;
+            margin-right: 30px;
+            border-radius: 20px;
+            position: relative;
+            transform: scale(0.9);
+            transition: all 0.3s;
+        }
+
+        .game-card:hover {
+            transform: scale(1);
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
+        }
+
+        .game-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 30%, #0a0a1ac4 80%);
+            border-radius: 20px;
+        }
+
+        /* 动态按钮 */
+        .cta-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #66CCFF, #FF99CC);
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: btn-pulse 2s infinite;
+            z-index: -1;
+        }
+
+        /* 关键帧动画 */
+        @keyframes rotate-ring {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes rotate-title {
+            from {
+                transform: translateX(-50%) rotate(0deg);
+            }
+
+            to {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+
+        @keyframes rotate-avatar {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes btn-pulse {
+            0% {
+                opacity: 0;
+                width: 60px;
+                height: 60px;
+            }
+
+            50% {
+                opacity: 1;
+                width: 120px;
+                height: 120px;
+            }
+
+            100% {
+                opacity: 0;
+                width: 200px;
+                height: 200px;
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .game-card {
+                width: 200px;
+                height: 200px;
+            }
+        }
+
+        #join p {
+            text-align: center;
+            font-size: 100px;
+        }
+
+        #join span {
+            letter-spacing: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stars"></div>
+    <div class="saturn-ring" style="top: 20px; right: 20px;"></div>
+    <div class="saturn-ring" style="bottom: 20px; left: 20px; transform: scale(0.8);"></div>
+
+    <header class="container1">
+        <div class="logo">博饼</div>
+        <nav>
+            <a>DornGames</a>
+        </nav>
+    </header>
+
+    <main class="container2">
+        <section id="join" class="card" style="text-align: center;">
+            <br>
+            <h2 class="section-title" id="ans">请按键丢骰子</h2>
+            <br>
+            <p id = "answer"><span><a>0</a><a>0</a><a>0</a><a>0</a><a>0</a></span><a>0</a></p>
+            <br>
+            <a href="#" class="cta-btn" id="throw">丢骰子!</a>
+            <br>
+        </section>
+    </main>
+</body>
+<script>
+const btn = document.getElementById("throw");//丢骰子的按钮
+btn.addEventListener('click', ()=>{//添加事件监听器
+    gameEngine.init();//初始化
+    var str1 = String(gameEngine.getNum());//将答案转化为字符串
+    var s = `<span>`;
+    for(var i=0;i<=4;i++){
+        s += `<a style="color:${str1[i] == 1 || str1[i] == 4 ? 'red' : 'white'}">${str1[i]}</a>`;
+    }
+    s += `</span><a style="color:${str1[i] == 1 || str1[i] == 4 ? 'red' : 'white'}">${str1[5]}</a>`;
+    document.getElementById("answer").innerHTML = s;//输出结果
+    document.getElementById("ans").innerHTML = gameEngine.judge();
+});
+var ans = 0;//最终答案
+var recorder = new Array(7).fill(0);//记录器
+var result = '对不起，什么都没抽到，再抽一次吧！';//本次掷骰子获得的结果
+var table = [,
+    `一`,`二`,`三`,`四`,`五`,`六`,
+    `七`,`八`,`九`,`十`,`十一`,`十二`,
+];//数字汉字对照表
+class GameEngine{//游戏引擎
+    init(){//初始化
+        ans = 0;
+        recorder = new Array(7).fill(0);
+        result = '对不起，什么都没抽到，再抽一次吧！';
+    }
+    rand(){//随机数抽取
+        return Math.ceil(Math.random()*6);//抽取1-6的数字
+    }
+    getNum(){
+        for(var i=0;i<6;i++){
+            var k = this.rand();
+            ans += (10 ** i) * k;//得到一个随机的六位数,从个位到十万位
+            recorder[k]++;//记录各个位数的数字
+        }
+        return ans;
+    }
+    judge(){//判定最终结果
+        console.log(recorder)
+        result = ``;//先清空
+        if(recorder[2] == 4 || recorder[3] == 4 || recorder[5] == 4 || recorder[6] == 4){
+            result = `四进`;
+        }
+        switch(recorder[4]){//先检查有几个4
+            case 1:
+                if(result == `四进`){result += `带`;}
+                result += '一秀';
+                break;
+            case 2:
+                if(result == `四进`){result += `带`;}
+                result += '二举';
+                break;
+            case 3:
+                result += '三红';
+                break;
+            case 4:
+                result += '状元';
+                if(recorder[1] == 2){
+                    result += '插金花';
+                }else{
+                    var sum = 0;
+                    for(var i=1;i<=6;i++){//求和
+                        sum += recorder[i] * i;
+                    }
+                    sum -= 16;//因为已经有4个4了
+                    result += `带${table[sum]}`;
+                }
+                break;
+            case 5:
+                result += '五红';
+                var sum = 0;
+                for(var i=1;i<=6;i++){//求和
+                    sum += recorder[i] * i;
+                }
+                sum -= 20;//因为已经有5个4了
+                result += `带${table[sum]}`;
+                break;
+            case 6:
+                result += '六杯红';
+                break;
+            default: break;
+        }
+        if(recorder[1] == 6){
+            result = `遍地锦`;
+        }
+        if(recorder[2] == 6 || recorder[3] == 6 || recorder[5] == 6 || recorder[6] == 6){
+            result = `黑六勃`;
+        }
+        if(recorder[2] == 5 || recorder[3] == 5 || recorder[5] == 5 || recorder[6] == 5){
+            result = `五子登科`;
+            var sum1 = 0;
+                for(var i=1;i<=6;i++){//求和
+                    if(recorder[i] == 1){
+                        sum1 = i;
+                    }
+                }
+                result += `带${table[sum1]}`;
+        }
+        if(recorder[1] == 1 && recorder[2] == 1 && recorder[3] == 1 && recorder[4] == 1 && recorder[5] == 1 && recorder[6] == 1){
+            result = `对堂`;
+        }
+        if(!result){//那就是真的什么都没得到
+            result = '对不起，什么都没抽到，再抽一次吧！';
+        }
+        return result;
+    }
+}
+globalThis.gameEngine = new GameEngine();
+</script>
+
+</html>
