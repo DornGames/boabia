@@ -401,7 +401,7 @@ class GameEngine{//游戏引擎
     judge(){//判定最终结果
         console.log(recorder)
         result = ``;//先清空
-        if(recorder[2] == 4 || recorder[3] == 4 || recorder[5] == 4 || recorder[6] == 4){
+        if(recorder[1] == 4 || recorder[2] == 4 || recorder[3] == 4 || recorder[5] == 4 || recorder[6] == 4){
             result = `四进`;
         }
         switch(recorder[4]){//先检查有几个4
@@ -470,5 +470,6 @@ class GameEngine{//游戏引擎
 }
 globalThis.gameEngine = new GameEngine();
 </script>
+
 
 </html>
